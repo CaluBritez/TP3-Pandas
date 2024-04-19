@@ -1,24 +1,28 @@
 import pandas as pd
 
-# Obtengo los datos
-datos_curso = pd.read_csv("edadesIPF.csv")
+edades = [19, 29, 19, 22, 23, 19, 30, 19, 19, 19, 20, 20, 20, 18, 22, 19, 34, 34, 21, 21, 22, 28, 29, 19, 20, 19, 25, 28, 21, 22]
 
-def analisis_estadistico(data):
+def contar_valores(lista):
+    diccionario_contadores = {}
+    lista.sort()
+    for valor in lista:
+        if valor in diccionario_contadores:
+            diccionario_contadores[valor] += 1
+        else:
+            diccionario_contadores[valor] = 1
+    return diccionario_contadores
 
-    # Verifico que el parámetro data sea de tipo DataFrame.
-    assert isinstance(data, pd.DataFrame), "El DataFrame no es de tipo DataFrame"  
-    # Verifico que la columna Edad sea de tipo numérico.
-    assert data["Edad"].dtype in ["int64","float64",], f"El tipo de dato de la columna Edad no es numérico"
+def analisis_estadistico(datos):
 
     # Creo un DataFrame vacío.
     data_frame = pd.DataFrame()
-
+    diccionario_edades = contar_valores(datos)
     # Agrego todas las columnas correspondientes
 
     #La primera me mostrata las edades existentes sin repetirse
-    data_frame["Edades"] = data["Edad"].sort_values().unique()
+    data_frame["Edades"] = diccionario_edades.keys()
     # fi: Frecuencia absoluta simple
-    data_frame["fi"] = data["Edad"].groupby(data["Edad"]).size().values
+    data_frame["fi"] = diccionario_edades.values()
     # Fi: Frecuencia absoluta acumulada.
     data_frame["Fi"] = data_frame["fi"].cumsum()
     # ri: Frecuencia absoluta relativa
@@ -29,8 +33,8 @@ def analisis_estadistico(data):
     data_frame["pi%"] = (data_frame["ri"] * 100).round(2)
     # Pi: Frecuencia porcentual acumulada
     data_frame["Pi%"] = (data_frame["pi%"].cumsum()).round(2)
-
+    
     return data_frame
 
-print(analisis_estadistico(datos_curso))
+print(analisis_estadistico(edades))
 
