@@ -1,6 +1,7 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
-edades = [19, 29, 19, "a", 23, 19, 30, 19, 19, 19, 20, 20, 20, 18, 22, 19, 34, 34, 21, 21, 22, 28, 29, 19, 20, 19, 25, 28, 21, 22]
+edades = [19, 29, 19, 23, 23, 19, 30, 19, 19, 19, 20, 20, 20, 18, 22, 19, 34, 34, 21, 21, 22, 28, 29, 19, 20, 19, 25, 28, 21, 22]
 
 def contar_valores(lista):
     diccionario_contadores = {}
@@ -54,4 +55,43 @@ def analisis_estadistico(datos):
 
 
 print(analisis_estadistico(edades))
+df = analisis_estadistico(edades)
+"""
+poligono de frecuencias
+fig, ax = plt.subplots()
+#ax.plot(df["Edades"], df["fi"])
+ax.bar(df["Edades"], df["fi"])
+plt.show()
+"""
+"""
+grafico de barras
+fig, ax = plt.subplots()
+ax.bar(df.index, df["fi"])  # Usamos df.index como ubicaciones de las barras
+plt.xticks(df.index, df["Edades"])  # Etiquetas del eje x
+plt.show()
+"""
+"""
+#grafico de barras con valores
+fig, ax = plt.subplots()
+bars = ax.bar(df.index, df["fi"])
 
+# Agregar el valor de cada barra en la misma barra
+for bar, fi in zip(bars, df["fi"]):
+    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height()/2, fi,
+            ha='center', va='bottom')
+
+plt.xticks(df.index, df["Edades"])  # Etiquetas del eje x
+plt.show()
+"""
+"""
+#HISTOGRAMA (se esta mostrando Fi)
+plt.hist(edades, bins=len(df), edgecolor='white',cumulative = True ,linewidth=0.7)
+plt.xlabel('Edades')
+plt.ylabel('Frecuencia absoluta')
+plt.title('Histograma de Edades')
+plt.show()
+"""
+#grafico de torta
+fig, ax = plt.subplots()
+ax.pie(df["fi"], labels=df["Edades"], autopct='%1.1f%%', shadow=True, startangle=90)
+plt.show()
